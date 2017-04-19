@@ -1,17 +1,23 @@
 package com.example.lovkimsrung.miwok;
 
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class FamilyActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class PhrasesFragment extends Fragment {
 
     private MediaPlayer mMediaPlayer;
     private AudioManager mAudioManager;
@@ -38,42 +44,47 @@ public class FamilyActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.word_list);
 
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    public PhrasesFragment() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.word_list, container, false);
+
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
         // Create an array of words
 
         // Create a list of words
         final ArrayList<Word> words = new ArrayList<Word>();
-        words.add(new Word(R.string.family_father, R.string.miwok_family_father,
-                R.drawable.family_father, R.raw.family_father));
-        words.add(new Word(R.string.family_mother, R.string.miwok_family_mother,
-                R.drawable.family_mother, R.raw.family_mother));
-        words.add(new Word(R.string.family_son, R.string.miwok_family_son,
-                R.drawable.family_son, R.raw.family_son));
-        words.add(new Word(R.string.family_daughter, R.string.miwok_family_daughter,
-                R.drawable.family_daughter, R.raw.family_daughter));
-        words.add(new Word(R.string.family_older_brother, R.string.miwok_family_older_brother,
-                R.drawable.family_older_brother, R.raw.family_older_brother));
-        words.add(new Word(R.string.family_younger_brother, R.string.miwok_family_younger_brother,
-                R.drawable.family_younger_brother, R.raw.family_younger_brother));
-        words.add(new Word(R.string.family_older_sister, R.string.miwok_family_older_sister,
-                R.drawable.family_older_sister, R.raw.family_older_sister));
-        words.add(new Word(R.string.family_younger_sister, R.string.miwok_family_younger_sister,
-                R.drawable.family_younger_sister, R.raw.family_younger_sister));
-        words.add(new Word(R.string.family_grandmother, R.string.miwok_family_grandmother,
-                R.drawable.family_grandmother, R.raw.family_grandmother));
-        words.add(new Word(R.string.family_grandfather, R.string.miwok_family_grandfather,
-                R.drawable.family_grandfather, R.raw.family_grandfather));
+        words.add(new Word(R.string.phrase_where_are_you_going,
+                R.string.miwok_phrase_where_are_you_going, R.raw.phrase_where_are_you_going));
+        words.add(new Word(R.string.phrase_what_is_your_name,
+                R.string.miwok_phrase_what_is_your_name, R.raw.phrase_what_is_your_name));
+        words.add(new Word(R.string.phrase_my_name_is,
+                R.string.miwok_phrase_my_name_is, R.raw.phrase_my_name_is));
+        words.add(new Word(R.string.phrase_how_are_you_feeling,
+                R.string.miwok_phrase_how_are_you_feeling, R.raw.phrase_how_are_you_feeling));
+        words.add(new Word(R.string.phrase_im_feeling_good,
+                R.string.miwok_phrase_im_feeling_good, R.raw.phrase_im_feeling_good));
+        words.add(new Word(R.string.phrase_are_you_coming,
+                R.string.miwok_phrase_are_you_coming, R.raw.phrase_are_you_coming));
+        words.add(new Word(R.string.phrase_yes_im_coming,
+                R.string.miwok_phrase_yes_im_coming, R.raw.phrase_yes_im_coming));
+        words.add(new Word(R.string.phrase_im_coming,
+                R.string.miwok_phrase_im_coming, R.raw.phrase_im_coming));
+        words.add(new Word(R.string.phrase_lets_go,
+                R.string.miwok_phrase_lets_go, R.raw.phrase_lets_go));
+        words.add(new Word(R.string.phrase_come_here,
+                R.string.miwok_phrase_come_here, R.raw.phrase_come_here));
 
-        WordAdapter adapter = new WordAdapter(this, words, R.color.category_family);
+        WordAdapter adapter = new WordAdapter(getActivity(), words, R.color.category_phrases);
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
         listView.setAdapter(adapter);
-
         // Set a click listener to play the audio when the list item is clicked on
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,7 +107,7 @@ public class FamilyActivity extends AppCompatActivity {
 
                     // Create and setup the {@link MediaPlayer} for the audio resource associated
                     // with the current word
-                    mMediaPlayer = MediaPlayer.create(FamilyActivity.this, word.getAudioResourceId());
+                    mMediaPlayer = MediaPlayer.create(getActivity(), word.getAudioResourceId());
 
                     // Start the audio file
                     mMediaPlayer.start();
@@ -107,11 +118,12 @@ public class FamilyActivity extends AppCompatActivity {
                 }
             }
         });
+
+        return rootView;
     }
 
-
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
 
         // When the activity is stopped, release the media player resource because we won't
@@ -136,4 +148,5 @@ public class FamilyActivity extends AppCompatActivity {
             mAudioManager.abandonAudioFocus(mOnAudioFocusChangeListener);
         }
     }
+
 }
